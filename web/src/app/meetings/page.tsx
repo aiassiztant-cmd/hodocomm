@@ -9,10 +9,27 @@ export default async function MeetingsPage() {
       <header style={{ marginBottom: "1.5rem" }}>
         <h1>Meetings</h1>
         <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>
-          All meetings (filters and detail view to be added).
+          All meetings. Use the button below to quickly schedule a new one.
         </p>
       </header>
       <Nav />
+      <div style={{ marginTop: "1.25rem" }}>
+        <a
+          href="/meetings/new"
+          style={{
+            display: "inline-block",
+            padding: "0.5rem 0.9rem",
+            borderRadius: "999px",
+            background: "#fbbf24",
+            color: "#111827",
+            fontWeight: 600,
+            fontSize: "0.9rem",
+            textDecoration: "none",
+          }}
+        >
+          + New meeting
+        </a>
+      </div>
       <ul style={{ listStyle: "none", padding: 0, marginTop: "1.5rem" }}>
         {meetings.map((meeting) => (
           <li

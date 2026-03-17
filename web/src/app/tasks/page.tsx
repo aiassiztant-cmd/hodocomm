@@ -9,10 +9,27 @@ export default async function TasksPage() {
       <header style={{ marginBottom: "1.5rem" }}>
         <h1>Tasks</h1>
         <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>
-          All tasks (filters and editing to be added).
+          All tasks. Use the button below to quickly add a new one.
         </p>
       </header>
       <Nav />
+      <div style={{ marginTop: "1.25rem" }}>
+        <a
+          href="/tasks/new"
+          style={{
+            display: "inline-block",
+            padding: "0.5rem 0.9rem",
+            borderRadius: "999px",
+            background: "#fbbf24",
+            color: "#111827",
+            fontWeight: 600,
+            fontSize: "0.9rem",
+            textDecoration: "none",
+          }}
+        >
+          + New task
+        </a>
+      </div>
       <ul style={{ listStyle: "none", padding: 0, marginTop: "1.5rem" }}>
         {tasks.map((task) => (
           <li
