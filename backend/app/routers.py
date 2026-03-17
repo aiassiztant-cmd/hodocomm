@@ -1,5 +1,6 @@
 from typing import List, Optional
 from uuid import UUID
+from datetime import date, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
@@ -73,11 +74,17 @@ def update_task(task_id: UUID, task_in: schemas.TaskUpdate, db: Session = Depend
 def list_meetings(
     user_id: Optional[UUID] = None,
     team_id: Optional[UUID] = None,
+    from_date: Optional[datetime] = Query(None, alias="from"),
+    to_date: Optional[datetime] = Query(None, alias="to"),
     db: Session = Depends(get_db),
 ):
     query = db.query(models.Meeting)
     if team_id:
         query = query.filter(models.Meeting.team_id == team_id)
+    if from_date:
+        query = query.filter(models.Meeting.start_at >= from_date)
+    if to_date:
+        query = query.filter(models.Meeting.start_at <= to_date)
     # Simple filter for user participation can be added later
     return query.order_by(models.Meeting.start_at.asc()).all()
 
