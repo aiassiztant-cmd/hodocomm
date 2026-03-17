@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "hodocomm-backend"
+version = "0.1.0"
+description = "Backend API for hodocomm (Pulse / HodoTasks)"
+authors = ["Shabeer Ali <dev@hodo.in>"]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+fastapi = "^0.115.0"
+uvicorn = {extras = ["standard"], version = "^0.30.0"}
+python-dotenv = "^1.0.1"
+SQLAlchemy = "^2.0.0"
+psycopg2-binary = "^2.9.9"
+python-jose = "^3.3.0"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.0.0"
+ruff = "^0.4.0"
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
