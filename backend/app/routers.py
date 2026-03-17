@@ -40,7 +40,9 @@ def list_tasks(
 
 @router.post("/tasks", response_model=schemas.Task, status_code=status.HTTP_201_CREATED)
 def create_task(task_in: schemas.TaskCreate, db: Session = Depends(get_db)):
-    task = models.Task(**task_in.model_dump())
+    # Pydantic v1: use .dict() instead of .model_dump()
+    task_data = task_in.dict()
+    task = models.Task(**task_data)
     db.add(task)
     db.commit()
     db.refresh(task)
@@ -49,7 +51,7 @@ def create_task(task_in: schemas.TaskCreate, db: Session = Depends(get_db)):
 
 @router.get("/tasks/{task_id}", response_model=schemas.Task)
 def get_task(task_id: UUID, db: Session = Depends(get_db)):
-    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    task = db.query(models.Task).filter(models.Task.id == str(task_id)).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
     return task
@@ -57,11 +59,12 @@ def get_task(task_id: UUID, db: Session = Depends(get_db)):
 
 @router.patch("/tasks/{task_id}", response_model=schemas.Task)
 def update_task(task_id: UUID, task_in: schemas.TaskUpdate, db: Session = Depends(get_db)):
-    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    task = db.query(models.Task).filter(models.Task.id == str(task_id)).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    update_data = task_in.model_dump(exclude_unset=True)
+    # Pydantic v1: use .dict(exclude_unset=True)
+    update_data = task_in.dict(exclude_unset=True)
     for field, value in update_data.items():
         setattr(task, field, value)
 
@@ -91,7 +94,8 @@ def list_meetings(
 
 @router.post("/meetings", response_model=schemas.Meeting, status_code=status.HTTP_201_CREATED)
 def create_meeting(meeting_in: schemas.MeetingCreate, db: Session = Depends(get_db)):
-    meeting = models.Meeting(**meeting_in.model_dump())
+    meeting_data = meeting_in.dict()
+    meeting = models.Meeting(**meeting_data)
     db.add(meeting)
     db.commit()
     db.refresh(meeting)
@@ -100,7 +104,7 @@ def create_meeting(meeting_in: schemas.MeetingCreate, db: Session = Depends(get_
 
 @router.get("/meetings/{meeting_id}", response_model=schemas.Meeting)
 def get_meeting(meeting_id: UUID, db: Session = Depends(get_db)):
-    meeting = db.query(models.Meeting).filter(models.Meeting.id == meeting_id).first()
+    meeting = db.query(models.Meeting).filter(models.Meeting.id == str(meeting_id)).first()
     if not meeting:
         raise HTTPException(status_code=404, detail="Meeting not found")
     return meeting
@@ -108,11 +112,11 @@ def get_meeting(meeting_id: UUID, db: Session = Depends(get_db)):
 
 @router.patch("/meetings/{meeting_id}", response_model=schemas.Meeting)
 def update_meeting(meeting_id: UUID, meeting_in: schemas.MeetingUpdate, db: Session = Depends(get_db)):
-    meeting = db.query(models.Meeting).filter(models.Meeting.id == meeting_id).first()
+    meeting = db.query(models.Meeting).filter(models.Meeting.id == str(meeting_id)).first()
     if not meeting:
         raise HTTPException(status_code=404, detail="Meeting not found")
 
-    update_data = meeting_in.model_dump(exclude_unset=True)
+    update_data = meeting_in.dict(exclude_unset=True)
     for field, value in update_data.items():
         setattr(meeting, field, value)
 
