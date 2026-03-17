@@ -17,6 +17,8 @@ def list_tasks(
     created_by_id: Optional[UUID] = None,
     team_id: Optional[UUID] = None,
     status_filter: Optional[str] = Query(None, alias="status"),
+    due_from: Optional[date] = None,
+    due_to: Optional[date] = None,
     db: Session = Depends(get_db),
 ):
     query = db.query(models.Task)
@@ -28,6 +30,10 @@ def list_tasks(
         query = query.filter(models.Task.team_id == team_id)
     if status_filter:
         query = query.filter(models.Task.status == status_filter)
+    if due_from:
+        query = query.filter(models.Task.due_date >= due_from)
+    if due_to:
+        query = query.filter(models.Task.due_date <= due_to)
     return query.order_by(models.Task.due_date.asc().nullslast()).all()
 
 
