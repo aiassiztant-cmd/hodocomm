@@ -36,7 +36,7 @@ class Task(TaskBase):
     progress: int
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 class MeetingBase(BaseModel):
@@ -67,4 +67,4 @@ class Meeting(MeetingBase):
     id: UUID
 
     class Config:
-        from_attributes = True
+        orm_mode = True
